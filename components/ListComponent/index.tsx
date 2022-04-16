@@ -37,7 +37,6 @@ const ListComponent = ({ name, docId }: { name: string; docId: string }) => {
     }
   }, [])
 
-  console.log(items)
   return (
     <div className="h-max min-w-[256px] max-w-xs rounded-lg border-2 border-neutral-300 p-4">
       {addItemPopupState ? (
