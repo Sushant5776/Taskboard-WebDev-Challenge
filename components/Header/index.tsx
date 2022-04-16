@@ -26,7 +26,12 @@ const Header = () => {
       const res = await fetch(
         `https://picsum.photos/id/${Math.round(Math.random() * 1000)}/info`
       )
-      const data: UserImageDetails = await res.json()
+      var data: UserImageDetails | null
+      try {
+        data = await res.json()
+      } catch (err) {
+        data = null
+      }
       setUserImage(data)
     }
 
@@ -43,7 +48,7 @@ const Header = () => {
       >
         {userImage ? (
           <Image
-            src={userImage?.download_url}
+            src={userImage.download_url}
             layout="fill"
             className="cursor-pointer rounded-full"
           />
