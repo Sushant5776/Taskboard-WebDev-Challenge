@@ -9,15 +9,18 @@ export interface UserImageDetails {
   download_url: string
 }
 
-export interface UserListItem {
-  uid: string
-  username: string
-  lists:
-    | {
-        name: string
-        items: { name: string; completed: boolean; description: string }[]
-      }[]
-    | []
+export interface List {
+  id: string
+  name: string
+  timestamp: string
+}
+
+export interface Item {
+  id: string
+  name: string
+  description: string
+  completeStatus: boolean
+  timestamp: string
 }
 
 export interface UserState {

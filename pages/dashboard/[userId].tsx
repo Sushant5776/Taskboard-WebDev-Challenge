@@ -1,7 +1,7 @@
 import Header from '@/components/Header'
-import { UserAction, UserListItem, UserState } from '@/types/interfaces'
+import { UserAction, List, UserState } from '@/types/interfaces'
 import { useContextValue } from 'ContextProvider'
-import { collection, getDoc, doc } from 'firebase/firestore'
+import { collection, onSnapshot, getDocs } from 'firebase/firestore'
 import { db } from 'firebaseApp'
 import { GetServerSideProps } from 'next'
 import Head from 'next/head'
@@ -10,16 +10,34 @@ import { PlusCircleIcon } from '@heroicons/react/solid'
 import AddListPopup from '@/components/AddListPopup'
 import { useRecoilState } from 'recoil'
 import { addListPopupStateAtom } from 'atoms/addListPopup'
+import ListComponent from '@/components/ListComponent'
+import { useRouter } from 'next/router'
 
-const Dashboard = ({ data }: { data: UserListItem | undefined }) => {
-  const [lists, setLists] = useState(data?.lists ?? [])
+const Dashboard = ({ data }: { data: List[] }) => {
+  const {
+    query: { userId },
+  } = useRouter()
+  const [lists, setLists] = useState(data)
   const [{ user }] = useContextValue() as [UserState, Dispatch<UserAction>]
   const [addListPopupState, setAddListPopupState] = useRecoilState(
     addListPopupStateAtom
   )
 
   useEffect(() => {
-    console.log(user)
+    const unsubscribe = onSnapshot(
+      collection(db, 'users', userId as string, 'lists'),
+      (snapshot) => {
+        const data = snapshot.docs.map(
+          (doc) => ({ id: doc.id, ...doc.data() } as List)
+        )
+        console.log(data[0])
+        setLists(data)
+      }
+    )
+
+    return () => {
+      unsubscribe()
+    }
   }, [])
 
   return (
@@ -29,22 +47,12 @@ const Dashboard = ({ data }: { data: UserListItem | undefined }) => {
         <title>Dashboard - {user?.displayName}</title>
       </Head>
       <Header />
-      <div>
-        {lists.map((list, index) => (
-          <div key={index}>
-            <h1>{list.name}</h1>
-            {list.items.length > 0 ? (
-              list.items.map((item, index) => (
-                <div key={index}>
-                  <h1>
-                    {item.name} - {item.completed ? 'done' : 'do it'}
-                  </h1>
-                </div>
-              ))
-            ) : (
-              <p>No Items In List</p>
-            )}
-          </div>
+      <h1 className="my-4 ml-4 text-2xl font-medium text-neutral-600">
+        Your Lists
+      </h1>
+      <div className="flex space-x-6 px-4">
+        {lists.map(({ id, name }) => (
+          <ListComponent key={id} name={name} docId={id} />
         ))}
       </div>
 
@@ -62,11 +70,18 @@ export default Dashboard
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { userId } = context.query
-  const data = (
-    await getDoc(doc(collection(db, 'users'), userId as string))
-  ).data() as UserListItem | undefined
+  let data: List[] = []
+  if (userId) {
+    data = (
+      await getDocs(collection(db, 'users', userId as string, 'lists'))
+    ).docs.map((doc) => ({
+      id: doc.id,
+      name: doc.data().name as string,
+      timestamp: doc.data().timestamp.toDate().toDateString() as string,
+    }))
+  }
 
   return {
-    props: { data: data ?? [] },
+    props: { data },
   }
 }

@@ -34,7 +34,7 @@ const Header = () => {
   }, [])
 
   return (
-    <div className="mx-auto mb-4 flex items-center justify-between bg-gradient-to-r from-blue-200 to-indigo-200 px-4 py-2 shadow-md">
+    <div className="mx-auto flex items-center justify-between bg-gradient-to-r from-blue-200 to-indigo-200 px-4 py-2 shadow-md">
       <h1 className="text-2xl">TasksBoard</h1>
       <div
         onClick={handleSignOut}
