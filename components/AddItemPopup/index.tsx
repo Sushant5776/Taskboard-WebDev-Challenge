@@ -1,15 +1,8 @@
-import { useSetRecoilState } from 'recoil'
-import { PlusCircleIcon, XIcon } from '@heroicons/react/solid'
+import { XIcon } from '@heroicons/react/solid'
 import { Dispatch, MouseEvent, SetStateAction, useState } from 'react'
-// import { addDoc, collection, serverTimestamp } from 'firebase/firestore'
-// import { useContextValue } from 'ContextProvider'
-// import { db } from 'firebaseApp'
-// import { UserAction, UserState } from '@/types/interfaces'
-import { addItemPopupStateAtom } from 'atoms/addItemPopup'
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore'
 import { db } from 'firebaseApp'
 import { useRouter } from 'next/router'
-import { Item } from '@/types/interfaces'
 
 const AddItemPopup = ({
   list,

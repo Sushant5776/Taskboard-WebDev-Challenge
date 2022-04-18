@@ -9,10 +9,7 @@ import { UserAction, UserState } from '@/types/interfaces'
 
 const AddListPopup = () => {
   const setAddListPopupState = useSetRecoilState(addListPopupStateAtom)
-  const [user, dispatch] = useContextValue() as [
-    UserState,
-    Dispatch<UserAction>
-  ]
+  const [user] = useContextValue() as [UserState, Dispatch<UserAction>]
   const [input, setInput] = useState('')
 
   const handlePropogation = (event: MouseEvent) => {

@@ -1,11 +1,9 @@
 import { Item } from '@/types/interfaces'
 import { PlusCircleIcon } from '@heroicons/react/solid'
-import { addItemPopupStateAtom } from 'atoms/addItemPopup'
 import { collection, onSnapshot } from 'firebase/firestore'
 import { db } from 'firebaseApp'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import { useRecoilState } from 'recoil'
 import AddItemPopup from '@/components/AddItemPopup'
 import ItemComponent from '@/components/ItemComponent'
 

@@ -11,16 +11,15 @@ import Link from 'next/link'
 import { Dispatch, MouseEvent } from 'react'
 import { useRecoilState, useResetRecoilState } from 'recoil'
 import { useRouter } from 'next/router'
-import { addDoc, collection, doc, setDoc } from 'firebase/firestore'
+import { doc, setDoc } from 'firebase/firestore'
+import nprogress from 'nprogress'
 
 const Form = ({ title, type }: { title: string; type: string }) => {
   const router = useRouter()
-  const [{ user }, dispatch] = useContextValue() as [
+  const [_state, dispatch] = useContextValue() as [
     UserState,
     Dispatch<UserAction>
   ]
-
-  // const [user, setUser] = useRecoilState(userStateAtom)
   const [form, setForm] = useRecoilState(signUpStateAtom)
   const resetForm = useResetRecoilState(signUpStateAtom)
 
@@ -39,7 +38,10 @@ const Form = ({ title, type }: { title: string; type: string }) => {
                   dispatch({ type: 'getIn', payload: value.user })
                   // clear inputs after signing up
                   resetForm()
-                  router.push(`/dashboard/${auth.currentUser?.uid}`)
+                  nprogress.start()
+                  router
+                    .push(`/dashboard/${auth.currentUser?.uid}`)
+                    .then(() => nprogress.done())
                 }
               })
               .catch((error) => alert(error.message))

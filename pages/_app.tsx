@@ -3,14 +3,17 @@ import { Context } from 'ContextProvider'
 import { onAuthStateChanged } from 'firebase/auth'
 import { auth } from 'firebaseApp'
 import type { AppProps } from 'next/app'
-import { NextServer } from 'next/dist/server/next'
-import { useRouter } from 'next/router'
+import { Router, useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { RecoilRoot } from 'recoil'
 import { useStore } from 'store'
+import nprogress from 'nprogress'
 
-// const [state, dispatch] = useReducer(reducer, initialState)
+nprogress.configure({ showSpinner: false })
 
+Router.events.on('routeChangeStart', () => nprogress.start())
+Router.events.on('routeChangeComplete', () => nprogress.done())
+Router.events.on('routeChangeError', () => nprogress.done())
 function MyApp({ Component, pageProps }: AppProps) {
   const [state, dispatch] = useStore()
   const router = useRouter()

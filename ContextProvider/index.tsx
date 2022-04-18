@@ -1,5 +1,4 @@
 import { UserAction, UserState } from '@/types/interfaces'
-import { User } from 'firebase/auth'
 import { createContext, Dispatch, useContext } from 'react'
 
 // This is the Data Layer

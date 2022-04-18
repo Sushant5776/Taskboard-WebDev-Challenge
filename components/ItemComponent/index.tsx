@@ -4,7 +4,6 @@ import {
   DotsVerticalIcon,
   ExclamationCircleIcon,
 } from '@heroicons/react/solid'
-// import { ExclamationCircleIcon } from '@heroicons/react/outline'
 
 const ItemComponent = ({
   item: { completeStatus, name, description, id, timestamp },
