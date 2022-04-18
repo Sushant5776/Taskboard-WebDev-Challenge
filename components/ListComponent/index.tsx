@@ -42,7 +42,7 @@ const ListComponent = ({ name, docId }: { name: string; docId: string }) => {
   }, [])
 
   return (
-    <div className="h-max min-w-[256px] max-w-xs rounded-lg border-2 border-neutral-300 p-4">
+    <div className="h-max min-w-[256px] max-w-xs rounded-lg border-2 border-neutral-200 p-4">
       {addItemPopupState ? (
         <AddItemPopup
           list={{ name: name, id: docId }}
@@ -83,7 +83,7 @@ const ListComponent = ({ name, docId }: { name: string; docId: string }) => {
       <hr className="my-2 rounded-lg border border-neutral-200" />
       <div className="space-y-3">
         {items.map((item) => (
-          <ItemComponent key={item.id} item={item} />
+          <ItemComponent key={item.id} item={item} listId={docId} />
         ))}
       </div>
     </div>

@@ -27,8 +27,6 @@ const EditListPopup = ({
     closer(false)
   }
 
-  console.log(userId, listId)
-
   const updateList = (event: MouseEvent) => {
     event.preventDefault()
     updateDoc(doc(db, 'users', userId as string, 'lists', listId), {

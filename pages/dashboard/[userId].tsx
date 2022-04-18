@@ -50,7 +50,7 @@ const Dashboard = ({ data }: { data: List[] }) => {
       <h1 className="my-4 ml-4 text-2xl font-medium text-neutral-600">
         Your Lists
       </h1>
-      <div className="flex space-x-6 px-4">
+      <div className="flex h-full space-x-6 px-4">
         {lists.map(({ id, name }) => (
           <ListComponent key={id} name={name} docId={id} />
         ))}
