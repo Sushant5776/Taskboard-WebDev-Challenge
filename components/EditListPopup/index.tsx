@@ -1,35 +1,43 @@
-import { addListPopupStateAtom } from 'atoms/addListPopup'
-import { useSetRecoilState } from 'recoil'
-import { PlusCircleIcon, XIcon } from '@heroicons/react/solid'
-import { Dispatch, MouseEvent, useState } from 'react'
-import { addDoc, collection, serverTimestamp } from 'firebase/firestore'
-import { useContextValue } from 'ContextProvider'
+import { RefreshIcon, XIcon } from '@heroicons/react/solid'
+import { Dispatch, MouseEvent, SetStateAction, useState } from 'react'
+import { doc, setDoc, updateDoc } from 'firebase/firestore'
 import { db } from 'firebaseApp'
-import { UserAction, UserState } from '@/types/interfaces'
+import { useRouter } from 'next/router'
 
-const AddListPopup = () => {
-  const setAddListPopupState = useSetRecoilState(addListPopupStateAtom)
-  const [user] = useContextValue() as [UserState, Dispatch<UserAction>]
+const EditListPopup = ({
+  listName,
+  listId,
+  closer,
+}: {
+  listName: string
+  listId: string
+  closer: Dispatch<SetStateAction<boolean>>
+}) => {
+  const {
+    query: { userId },
+  } = useRouter()
   const [input, setInput] = useState('')
 
   const handlePropogation = (event: MouseEvent) => {
     event.stopPropagation()
   }
 
-  const createList = (event: MouseEvent) => {
-    event.preventDefault()
-    addDoc(collection(db, 'users', user.user!.uid, 'lists'), {
-      name: input,
-      timestamp: serverTimestamp(),
-    }).then(() => {
-      setInput('')
-      setAddListPopupState(false)
-    })
-  }
-
   const close = () => {
     setInput('')
-    setAddListPopupState(false)
+    closer(false)
+  }
+
+  console.log(userId, listId)
+
+  const updateList = (event: MouseEvent) => {
+    event.preventDefault()
+    updateDoc(doc(db, 'users', userId as string, 'lists', listId), {
+      name: input,
+    })
+      .then(() => {
+        close()
+      })
+      .catch((err) => alert(err.message))
   }
 
   return (
@@ -48,20 +56,26 @@ const AddListPopup = () => {
           <XIcon className="h-6 w-6 fill-rose-400 active:scale-95 group-hover:fill-rose-500" />
         </div>
         <div className="clear-both space-y-4">
-          <h1 className="text-center text-lg font-medium text-neutral-700">
-            Create New List
+          <h1 className="text-center text-xl font-medium text-neutral-600">
+            Edit - {listName}
           </h1>
           <form className="flex items-center space-x-2">
             <input
               type="text"
               value={input}
               onChange={(event) => setInput(event.target.value)}
-              placeholder="New List Name"
               className="focus:shadow-mg flex-1 rounded-lg bg-transparent bg-white p-2 text-neutral-700 focus:shadow-sm focus:outline-none"
+              placeholder={`Enter New Name for ${listName}`}
             />
-            <button className="group" disabled={!input} onClick={createList}>
-              <PlusCircleIcon
-                className={`h-11 w-11 fill-indigo-500 hover:fill-indigo-600 active:scale-95 group-disabled:scale-100 group-disabled:fill-gray-400`}
+            <button
+              type="submit"
+              title={`Update ${listName}`}
+              className="group"
+              disabled={!input}
+              onClick={updateList}
+            >
+              <RefreshIcon
+                className={`h-10 w-10 fill-indigo-500 hover:fill-indigo-600 active:scale-95 group-disabled:scale-100 group-disabled:fill-gray-400`}
               />
             </button>
           </form>
@@ -71,4 +85,4 @@ const AddListPopup = () => {
   )
 }
 
-export default AddListPopup
+export default EditListPopup
