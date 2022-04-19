@@ -30,7 +30,6 @@ const Dashboard = ({ data }: { data: List[] }) => {
         const data = snapshot.docs.map(
           (doc) => ({ id: doc.id, ...doc.data() } as List)
         )
-        console.log(data[0])
         setLists(data)
       }
     )
