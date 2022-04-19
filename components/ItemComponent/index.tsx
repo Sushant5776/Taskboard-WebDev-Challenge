@@ -50,26 +50,37 @@ const ItemComponent = ({
           ) : (
             <ExclamationCircleIcon className="h-6 w-6 rounded-full fill-slate-500 shadow-md" />
           )}
-          {/* name and description */}
-          <div>
+          {/* name */}
+          <div className="flex-1">
             <p>{name}</p>
           </div>
         </div>
         {/* edit */}
         <div className="flex items-center space-x-2 divide-neutral-200">
-          <TrashIcon
-            onClick={() =>
-              deleteDoc(
-                doc(db, 'users', userId as string, 'lists', listId, 'items', id)
-              )
-            }
-            className="h-5 w-5 cursor-pointer text-red-400 hover:text-red-500 active:scale-95"
-          />
-
-          <DotsVerticalIcon
-            onClick={() => setEditItem(true)}
-            className="h-5 w-5 cursor-pointer fill-neutral-500 hover:fill-neutral-600 active:scale-95"
-          />
+          <div title={`Delete ${name}`}>
+            <TrashIcon
+              onClick={() =>
+                deleteDoc(
+                  doc(
+                    db,
+                    'users',
+                    userId as string,
+                    'lists',
+                    listId,
+                    'items',
+                    id
+                  )
+                )
+              }
+              className="h-5 w-5 cursor-pointer text-red-400 hover:text-red-500 active:scale-95"
+            />
+          </div>
+          <div title={`Edit ${name}`}>
+            <DotsVerticalIcon
+              onClick={() => setEditItem(true)}
+              className="h-5 w-5 cursor-pointer fill-neutral-500 hover:fill-neutral-600 active:scale-95"
+            />
+          </div>
         </div>
       </div>
       <hr className="border border-neutral-200" />

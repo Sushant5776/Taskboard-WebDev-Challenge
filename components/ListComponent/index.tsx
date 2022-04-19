@@ -4,13 +4,14 @@ import {
   PencilIcon,
   PlusCircleIcon,
 } from '@heroicons/react/solid'
-import { collection, onSnapshot } from 'firebase/firestore'
+import { collection, deleteDoc, doc, onSnapshot } from 'firebase/firestore'
 import { db } from 'firebaseApp'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import AddItemPopup from '@/components/AddItemPopup'
 import ItemComponent from '@/components/ItemComponent'
 import EditListPopup from '../EditListPopup'
+import { TrashIcon } from '@heroicons/react/outline'
 
 const ListComponent = ({ name, docId }: { name: string; docId: string }) => {
   const {
@@ -42,7 +43,7 @@ const ListComponent = ({ name, docId }: { name: string; docId: string }) => {
   }, [])
 
   return (
-    <div className="h-max min-w-[256px] max-w-xs rounded-lg border-2 border-neutral-200 p-4">
+    <div className="h-max min-w-[20%] max-w-sm rounded-lg border-2 border-neutral-200 p-4">
       {addItemPopupState ? (
         <AddItemPopup
           list={{ name: name, id: docId }}
@@ -61,7 +62,21 @@ const ListComponent = ({ name, docId }: { name: string; docId: string }) => {
         ''
       )}
       <div className="flex items-center justify-between">
-        <h1 className="text-lg font-medium text-emerald-700">{name}</h1>
+        <div className="flex flex-1 items-center space-x-2 divide-x-2 divide-neutral-200">
+          <div title={`Delete ${name}`}>
+            <TrashIcon
+              onClick={() =>
+                deleteDoc(
+                  doc(db, 'users', userId as string, 'lists', docId)
+                ).catch((err) => alert(err.message))
+              }
+              className="h-6 w-6 cursor-pointer text-red-400 hover:text-red-500 active:scale-95"
+            />
+          </div>
+          <h1 className="block pl-2 text-lg font-medium text-emerald-700">
+            {name}
+          </h1>
+        </div>
         <div className="flex items-center space-x-1">
           <button
             onClick={() => setAddItemPopupState(true)}
