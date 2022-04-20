@@ -68,7 +68,7 @@ const Form = ({ title, type }: { title: string; type: string }) => {
   }
 
   return (
-    <main className="absolute top-1/2 left-1/2 h-max w-[25%] -translate-x-1/2 -translate-y-1/2 space-y-4 rounded-lg bg-gradient-to-r from-teal-100 to-lime-100 p-4 shadow-lg sm:w-1/2">
+    <main className="absolute top-1/2 left-1/2 h-max w-[25%] -translate-x-1/2 -translate-y-1/2 space-y-4 rounded-lg bg-gradient-to-r from-teal-100 to-lime-100 p-4 shadow-lg">
       <h1 className="text-center text-3xl font-semibold text-neutral-500">
         {title}!
       </h1>
