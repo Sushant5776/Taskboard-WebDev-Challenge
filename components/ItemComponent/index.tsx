@@ -24,7 +24,13 @@ const ItemComponent = ({
   } = useRouter()
 
   return (
-    <div className="space-y-2 divide-gray-200 rounded-lg  border-2 p-2">
+    <div
+      className={`space-y-2 divide-gray-200 rounded-lg border-2 p-2 ${
+        completeStatus
+          ? 'border-green-500 border-opacity-40'
+          : 'border-slate-200'
+      }`}
+    >
       {editItem ? (
         <EditItemPopup
           closer={setEditItem}
@@ -37,11 +43,7 @@ const ItemComponent = ({
       ) : (
         ''
       )}
-      <div
-        className={`flex items-center justify-between ${
-          completeStatus ? 'border-green-200' : 'border-slate-200'
-        }`}
-      >
+      <div className="flex items-center justify-between">
         {/* Wrapper for first two elements because of flex container */}
         <div className="flex flex-1 items-center space-x-2">
           {/* complete icon */}
